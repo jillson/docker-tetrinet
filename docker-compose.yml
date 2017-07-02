@@ -1,0 +1,25 @@
+version: '2'
+
+volumes:
+  server_state: {}
+
+services:
+  server:
+    build: ./compose/server
+    volumes:
+      - server_state:/home/gtserver/data
+    env_file: .env
+    ports:
+      - "0.0.0.0:31457:31457"
+
+  client:
+    build: ./compose/client
+    depends_on:
+      - server
+    links:
+      - "server:gserver"
+    env_file: .env
+    ports:
+      - "0.0.0.0:5556:3389"
+
+
